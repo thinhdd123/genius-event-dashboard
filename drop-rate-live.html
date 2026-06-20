@@ -1,0 +1,242 @@
+<!doctype html><html lang="vi"><head>
+<meta charset="utf-8">
+<title>Genius · Drop Rate by Cutoff (filters)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#EEF1F6; --card:#FFFFFF; --ink:#1B2530; --muted:#5C6A7A; --faint:#94A1B2;
+    --line:#E2E7EF; --line2:#EDF0F5; --blue:#3C82F6; --accent:#1A73E8;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1500px;margin:0 auto;padding:20px 18px 60px}
+  header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+  h1{font-size:19px;font-weight:700;margin:0;display:flex;align-items:center;gap:9px}
+  h1 .pip{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  h1 span{color:var(--muted);font-weight:500}
+  .meta{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:right;line-height:1.7}
+
+  /* filter bar */
+  .filters{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px}
+  .fld{position:relative}
+  .fld>button,.daterange{display:flex;align-items:center;gap:10px;justify-content:space-between;
+    background:var(--card);border:1px solid var(--line);border-radius:9px;padding:9px 13px;cursor:pointer;
+    font-family:var(--sans);font-size:12.5px;color:var(--ink);min-width:150px;font-weight:500}
+  .fld>button:hover{border-color:#C7D2E0}
+  .fld>button .lab{color:var(--muted)}
+  .fld>button .lab b{color:var(--ink);font-weight:600}
+  .fld>button .car{color:var(--faint);font-size:10px}
+  .fld.disabled>button{background:#F4F6F9;color:var(--faint);cursor:not-allowed;border-style:dashed}
+  .fld.disabled>button .lab b{color:var(--faint)}
+  .daterange input{border:0;font-family:var(--mono);font-size:12px;color:var(--ink);background:transparent;width:108px}
+  .panel{position:absolute;top:calc(100% + 5px);left:0;z-index:20;background:#fff;border:1px solid var(--line);
+    border-radius:10px;box-shadow:0 12px 34px rgba(16,24,40,.16);padding:8px;min-width:230px;max-height:320px;
+    overflow:auto;display:none}
+  .panel.open{display:block}
+  .panel .srch{width:100%;border:1px solid var(--line);border-radius:7px;padding:7px 9px;font-size:12px;
+    margin-bottom:6px;font-family:var(--mono)}
+  .panel label{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:12.5px}
+  .panel label:hover{background:#F3F7FF}
+  .panel label .cnt{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .panel .acts{display:flex;justify-content:space-between;padding:4px 4px 2px;border-top:1px solid var(--line2);margin-top:4px}
+  .panel .acts a{font-size:11.5px;color:var(--accent);cursor:pointer;font-weight:600}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .tabs button{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--muted);
+    font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:9px;cursor:pointer;transition:.12s}
+  .tabs button:hover{border-color:#C7D2E0;color:var(--ink)}
+  .tabs button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(26,115,232,.28)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.04);position:relative;min-height:160px}
+  .card-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:14px 18px 11px}
+  .card-head h2{font-size:15px;font-weight:700;margin:0}
+  .card-head .sub{font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .scroll{overflow-x:auto}
+  table{border-collapse:separate;border-spacing:0;width:100%;font-variant-numeric:tabular-nums}
+  th,td{padding:7px 11px;text-align:right;white-space:nowrap;font-family:var(--mono);font-size:12px}
+  thead th{position:sticky;top:0;z-index:3;background:#F7F9FC;color:var(--muted);font-weight:700;font-size:10.5px;
+    border-bottom:2px solid var(--line);font-family:var(--sans);vertical-align:bottom;line-height:1.25}
+  thead th.grp{color:var(--ink)}
+  tbody td{border-bottom:1px solid var(--line2)}
+  .col-idx{color:var(--faint);width:34px}
+  .col-date{text-align:left;font-family:var(--sans);font-weight:600}
+  th.s0,td.s0{position:sticky;left:0;z-index:2;background:#fff}
+  th.s1,td.s1{position:sticky;left:34px;z-index:2;background:#fff;box-shadow:1px 0 0 var(--line)}
+  thead th.s0,thead th.s1{z-index:4;background:#F7F9FC}
+  tbody tr:hover td,tbody tr:hover td.s0,tbody tr:hover td.s1{background:#F3F7FF}
+  .pct{color:var(--muted)}
+  tr.total td{font-weight:700;border-top:2px solid var(--line);border-bottom:none;background:#FBFCFE}
+  tr.total td.s0,tr.total td.s1{background:#FBFCFE}
+  .overlay{position:absolute;inset:0;background:rgba(255,255,255,.72);display:none;align-items:center;
+    justify-content:center;z-index:9;font-family:var(--mono);font-size:13px;color:var(--accent)}
+  .overlay.on{display:flex}
+  .spin{width:15px;height:15px;border:2px solid #C7D7F5;border-top-color:var(--accent);border-radius:50%;
+    display:inline-block;margin-right:9px;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .note{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:12px;line-height:1.7}
+  .err{color:#C0392B}
+  @media(prefers-reduced-motion:reduce){.spin{animation:none}}
+</style></head><body>
+<div class="wrap">
+  <header>
+    <h1><span class="pip"></span>Genius <span>· Drop Rate by Cutoff</span>
+      <a href="drop-rate.html" style="font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;margin-left:6px">bản tĩnh ↗</a></h1>
+    <div class="meta" id="meta">live · BigQuery iip055-genius</div>
+  </header>
+
+  <div class="filters" id="filters">
+    <div class="fld daterange" id="dr">
+      <input type="date" id="from"><span style="color:var(--faint)">→</span><input type="date" id="to">
+    </div>
+    <!-- working multiselects injected here -->
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <div class="card-head"><h2 id="ftitle">…</h2><div class="sub" id="fsub"></div></div>
+    <div class="scroll"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+    <div class="overlay" id="ovl"><span class="spin"></span>Đang query BigQuery…</div>
+  </div>
+  <div class="note" id="note"></div>
+</div>
+
+<script>
+let SPEC=null, FILTERS=null, DATA={daily:[],total:{}};
+let active=null;
+const sel={version:new Set(),country:new Set(),source:new Set()};
+const DISABLED=[
+  ["Day Retention","cohort — không phải filter trong GA4"],
+  ["User Subscription Type","nguồn RevenueCat (không có trong GA4 export)"],
+  ["Cancellation Status","nguồn RevenueCat (không có trong GA4 export)"],
+  ["_campaign_name_","Adjust chưa resolve ({{campaign.name}})"],
+  ["adj_adgroup_name","Adjust chưa resolve ({{adset.name}})"],
+  ["creative_id","trống trong GA4 export"],
+];
+const WORKING=[["app_version","version"],["country","country"],["_network_name_","source"]];
+
+const nf=n=>(n||0).toLocaleString('vi-VN');
+const pf=(num,den)=>{ if(!den) return '0%'; return (num/den*100).toFixed(2).replace('.',',')+'%'; };
+const viDate=s=>{const[y,m,d]=s.split('-');return `${+d} thg ${+m}, ${y}`;};
+const blue=r=>`rgba(60,130,246,${(0.06+0.62*Math.max(0,Math.min(1,r))).toFixed(3)})`;
+const colMax=k=>{let m=0;for(const r of DATA.daily)if(r[k]>m)m=r[k];return m||1;};
+const ds=s=>s.replaceAll('-','');   // YYYY-MM-DD -> YYYYMMDD
+
+async function api(path){ const r=await fetch(path); const j=await r.json();
+  if(j.error) throw new Error(j.error); return j; }
+
+function buildFilterBar(){
+  const host=document.getElementById('filters');
+  // working multiselects
+  for(const [label,typ] of WORKING){
+    const opts=FILTERS[typ]||[];
+    const fld=document.createElement('div'); fld.className='fld'; fld.dataset.typ=typ;
+    fld.innerHTML=`<button><span class="lab"><b>${label}</b></span><span class="summ" style="color:var(--accent);font-weight:600"></span><span class="car">▼</span></button>
+      <div class="panel"><input class="srch" placeholder="tìm…">
+        <div class="list"></div>
+        <div class="acts"><a data-a="all">Chọn tất cả</a><a data-a="none">Bỏ chọn</a></div></div>`;
+    host.appendChild(fld);
+    const panel=fld.querySelector('.panel'), list=fld.querySelector('.list');
+    const draw=(flt='')=>{ list.innerHTML='';
+      opts.filter(o=>o.v.toLowerCase().includes(flt)).slice(0,200).forEach(o=>{
+        const id=typ+'_'+o.v;
+        const l=document.createElement('label');
+        l.innerHTML=`<input type="checkbox" ${sel[typ].has(o.v)?'checked':''}><span>${o.v}</span><span class="cnt">${nf(o.u)}</span>`;
+        l.querySelector('input').onchange=e=>{ e.target.checked?sel[typ].add(o.v):sel[typ].delete(o.v); summ(); };
+        list.appendChild(l);
+      }); };
+    const summ=()=>{ fld.querySelector('.summ').textContent = sel[typ].size? ` ${sel[typ].size} chọn`:''; };
+    fld.querySelector('button').onclick=()=>{ document.querySelectorAll('.panel').forEach(p=>{if(p!==panel)p.classList.remove('open');});
+      panel.classList.toggle('open'); draw(); };
+    fld.querySelector('.srch').oninput=e=>draw(e.target.value.toLowerCase());
+    fld.querySelectorAll('.acts a').forEach(a=>a.onclick=()=>{
+      if(a.dataset.a==='all') opts.forEach(o=>sel[typ].add(o.v)); else sel[typ].clear();
+      draw(fld.querySelector('.srch').value.toLowerCase()); summ();
+    });
+    summ();
+  }
+  // disabled placeholders (mirror the requested layout)
+  for(const [label,why] of DISABLED){
+    const fld=document.createElement('div'); fld.className='fld disabled';
+    fld.innerHTML=`<button title="${why}" disabled><span class="lab"><b>${label}</b></span><span class="car">▼</span></button>`;
+    host.appendChild(fld);
+  }
+  document.addEventListener('click',e=>{ if(!e.target.closest('.fld')) document.querySelectorAll('.panel').forEach(p=>p.classList.remove('open')); });
+}
+
+function renderTabs(){
+  const t=document.getElementById('tabs'); t.innerHTML='';
+  for(const fid in SPEC){
+    const b=document.createElement('button'); b.textContent=SPEC[fid].label;
+    b.setAttribute('aria-pressed',fid===active);
+    b.onclick=()=>{active=fid;renderTabs();renderTable();};
+    t.appendChild(b);
+  }
+}
+function renderTable(){
+  const f=SPEC[active], steps=f.steps;
+  document.getElementById('ftitle').textContent=f.label;
+  document.getElementById('fsub').textContent=`${steps.length} bước · % theo User Active · ${DATA.daily.length} ngày`;
+  let h='<tr><th class="s0 col-idx">#</th><th class="s1" style="text-align:left">export_date</th><th class="grp">User Active</th>';
+  for(const [k,lab] of steps) h+=`<th class="grp">${lab}</th><th>%${lab.replace(/ /g,'&nbsp;')}</th>`;
+  document.getElementById('thead').innerHTML=h+'</tr>';
+  const uaMax=colMax('user_active'), mx={}; for(const[k]of steps) mx[k]=colMax(k);
+  let b='';
+  DATA.daily.forEach((r,i)=>{
+    const ua=r.user_active;
+    b+=`<tr><td class="s0 col-idx">${i+1}</td><td class="s1 col-date">${viDate(r.d)}</td>`+
+       `<td style="background:${blue(ua/uaMax)}">${nf(ua)}</td>`;
+    for(const[k]of steps){ const v=r[k]||0;
+      b+=`<td style="background:${blue(v/mx[k])}">${nf(v)}</td><td class="pct" style="background:${blue(ua?v/ua:0)}">${pf(v,ua)}</td>`;
+    }
+    b+='</tr>';
+  });
+  const t=DATA.total, tua=t.user_active||0;
+  b+=`<tr class="total"><td class="s0 col-idx"></td><td class="s1 col-date">Tổng cộng</td><td>${nf(tua)}</td>`;
+  for(const[k]of steps){const v=t[k]||0; b+=`<td>${nf(v)}</td><td class="pct">${pf(v,tua)}</td>`;}
+  document.getElementById('tbody').innerHTML=b+'</tr>';
+  if(!DATA.daily.length) document.getElementById('tbody').innerHTML='<tr><td colspan="30" style="text-align:center;padding:26px;color:var(--faint)">Không có dữ liệu cho bộ lọc này.</td></tr>';
+}
+
+let timer=null;
+function scheduleLoad(){ clearTimeout(timer); timer=setTimeout(loadFunnel,250); }
+async function loadFunnel(){
+  const ovl=document.getElementById('ovl'); ovl.classList.add('on'); ovl.classList.remove('err');
+  const p=new URLSearchParams();
+  p.set('from',ds(document.getElementById('from').value));
+  p.set('to',ds(document.getElementById('to').value));
+  if(sel.version.size) p.set('version',[...sel.version].join(','));
+  if(sel.country.size) p.set('country',[...sel.country].join(','));
+  if(sel.source.size)  p.set('source',[...sel.source].join(','));
+  try{ DATA=await api('/api/funnel?'+p.toString()); renderTable(); }
+  catch(e){ ovl.innerHTML='<span class="err">Lỗi: '+e.message+'</span>'; ovl.classList.add('err'); return; }
+  ovl.classList.remove('on');
+}
+
+// apply filters button-less: reload when panel closes or date changes
+document.getElementById('from').onchange=scheduleLoad;
+document.getElementById('to').onchange=scheduleLoad;
+document.addEventListener('click',e=>{ if(e.target.closest('.acts a')||(e.target.matches('.panel input[type=checkbox]'))) scheduleLoad(); });
+
+(async function init(){
+  try{
+    [SPEC,FILTERS]=await Promise.all([api('/api/spec'),api('/api/filters')]);
+  }catch(e){ document.getElementById('note').innerHTML='<span class="err">Không kết nối được server. Chạy <b>./serve.sh</b> rồi mở lại trang.</span>'; return; }
+  active=Object.keys(SPEC)[0];
+  // default date range = last 14 days of available data
+  const hi=FILTERS.range.hi, lo=FILTERS.range.lo;
+  const hiISO=`${hi.slice(0,4)}-${hi.slice(4,6)}-${hi.slice(6,8)}`;
+  const d=new Date(+hi.slice(0,4),+hi.slice(4,6)-1,+hi.slice(6,8)); d.setDate(d.getDate()-13);
+  const loBound=`${lo.slice(0,4)}-${lo.slice(4,6)}-${lo.slice(6,8)}`;
+  const fromISO=d.toISOString().slice(0,10) < loBound ? loBound : d.toISOString().slice(0,10);
+  const F=document.getElementById('from'), T=document.getElementById('to');
+  F.min=loBound;F.max=hiISO;T.min=loBound;T.max=hiISO;F.value=fromISO;T.value=hiISO;
+  document.getElementById('meta').innerHTML=`live · iip055-genius<br>data ${loBound} → ${hiISO}`;
+  document.getElementById('note').innerHTML=
+    'Mỗi ô = <b>user duy nhất</b>/ngày chạm bước · % theo User Active · Tổng cộng = user duy nhất toàn kỳ. '+
+    'Filter chạy query BigQuery trực tiếp. Các ô <b>nét đứt</b> không có dữ liệu trong GA4 export.';
+  buildFilterBar(); renderTabs(); loadFunnel();
+})();
+</script>
+</body></html>

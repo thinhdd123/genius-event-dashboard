@@ -1,0 +1,161 @@
+<title>Genius · Drop Rate by Cutoff</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#EEF1F6; --card:#FFFFFF; --ink:#1B2530; --muted:#5C6A7A; --faint:#94A1B2;
+    --line:#E2E7EF; --line2:#EDF0F5; --blue:#3C82F6; --accent:#1A73E8;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1500px;margin:0 auto;padding:22px 18px 60px}
+  header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px}
+  h1{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0;display:flex;align-items:center;gap:9px}
+  h1 .pip{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  h1 span{color:var(--muted);font-weight:500}
+  .meta{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:right;line-height:1.7}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tabs button{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--muted);
+    font-family:var(--sans);font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:9px;cursor:pointer;
+    transition:.12s}
+  .tabs button:hover{border-color:#C7D2E0;color:var(--ink)}
+  .tabs button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff;
+    box-shadow:0 2px 8px rgba(26,115,232,.28)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  .card-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    padding:15px 18px 12px}
+  .card-head h2{font-size:15px;font-weight:700;margin:0}
+  .card-head .sub{font-family:var(--mono);font-size:11px;color:var(--faint)}
+
+  .scroll{overflow-x:auto}
+  table{border-collapse:separate;border-spacing:0;width:100%;font-variant-numeric:tabular-nums}
+  th,td{padding:7px 11px;text-align:right;white-space:nowrap;font-family:var(--mono);font-size:12px}
+  thead th{position:sticky;top:0;z-index:3;background:#F7F9FC;color:var(--muted);font-weight:700;
+    font-size:10.5px;letter-spacing:.02em;border-bottom:2px solid var(--line);font-family:var(--sans);
+    text-transform:none;vertical-align:bottom;line-height:1.25}
+  thead th.grp{color:var(--ink)}
+  tbody td{border-bottom:1px solid var(--line2)}
+  .col-idx{text-align:right;color:var(--faint);width:34px}
+  .col-date{text-align:left;font-family:var(--sans);font-weight:600;color:var(--ink)}
+  /* sticky first 2 cols */
+  th.s0,td.s0{position:sticky;left:0;z-index:2;background:#fff}
+  th.s1,td.s1{position:sticky;left:34px;z-index:2;background:#fff;box-shadow:1px 0 0 var(--line)}
+  thead th.s0,thead th.s1{z-index:4;background:#F7F9FC}
+  tbody tr:hover td{background:#F3F7FF}
+  tbody tr:hover td.s0,tbody tr:hover td.s1{background:#F3F7FF}
+  .pct{color:var(--muted)}
+  tr.total td{font-weight:700;border-top:2px solid var(--line);border-bottom:none;
+    background:#FBFCFE;color:var(--ink);font-size:12px}
+  tr.total td.s0,tr.total td.s1{background:#FBFCFE}
+  tr.total .col-date{color:var(--ink)}
+  .note{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:12px;line-height:1.7}
+  .legend{display:inline-flex;align-items:center;gap:7px;margin-left:4px}
+  .legend i{display:inline-block;width:46px;height:11px;border-radius:3px;
+    background:linear-gradient(90deg,rgba(60,130,246,.08),rgba(60,130,246,.7))}
+  @media(max-width:760px){ .meta{text-align:left} }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1><span class="pip"></span>Genius <span>· Drop Rate by Cutoff</span>
+      <a href="index.html" style="font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;margin-left:6px">← Event Console</a></h1>
+    <div class="meta" id="meta"></div>
+  </header>
+  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <div class="card-head">
+      <h2 id="ftitle"></h2>
+      <div class="sub" id="fsub"></div>
+    </div>
+    <div class="scroll"><table id="tbl"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+  </div>
+  <div class="note" id="note"></div>
+</div>
+
+<script>
+const DATA = "__DATA_PLACEHOLDER__";
+const F = DATA.features, DAILY = DATA.daily, TOTAL = DATA.total;
+let active = new URLSearchParams(location.search).get('f');
+if(!F[active]) active = Object.keys(F)[0];
+
+const nf = n => (n||0).toLocaleString('vi-VN');
+const pf = (num,den) => {
+  if(!den) return '0%';
+  const v = num/den*100;
+  return v.toFixed(2).replace('.',',')+'%';
+};
+const viDate = s => { const [y,m,d]=s.split('-'); return `${+d} thg ${+m}, ${y}`; };
+const blue = ratio => `rgba(60,130,246,${(0.06+0.62*Math.max(0,Math.min(1,ratio))).toFixed(3)})`;
+
+function colMax(key){ let m=0; for(const r of DAILY){ if(r[key]>m) m=r[key]; } return m||1; }
+
+function renderTabs(){
+  const t=document.getElementById('tabs'); t.innerHTML='';
+  for(const fid in F){
+    const b=document.createElement('button');
+    b.textContent=F[fid].label; b.setAttribute('aria-pressed', fid===active);
+    b.onclick=()=>{ active=fid; renderTabs(); renderTable(); };
+    t.appendChild(b);
+  }
+}
+
+function renderTable(){
+  const f=F[active], steps=f.steps;
+  document.getElementById('ftitle').textContent=f.label;
+  document.getElementById('fsub').textContent=`${steps.length} bước · % theo User Active`;
+  // header
+  let h='<tr>'+
+    '<th class="s0 col-idx">#</th>'+
+    '<th class="s1" style="text-align:left">export_date</th>'+
+    '<th class="grp">User Active</th>';
+  for(const [key,lab] of steps){
+    h+=`<th class="grp">${lab}</th><th>%${lab.replace(/ /g,'&nbsp;')}</th>`;
+  }
+  h+='</tr>';
+  document.getElementById('thead').innerHTML=h;
+  // precompute column maxima for heatmap (counts)
+  const uaMax=colMax('user_active');
+  const maxes={}; for(const [key] of steps) maxes[key]=colMax(key);
+  // body
+  let b='';
+  DAILY.forEach((r,i)=>{
+    const ua=r.user_active;
+    b+='<tr>'+
+      `<td class="s0 col-idx">${i+1}</td>`+
+      `<td class="s1 col-date">${viDate(r.d)}</td>`+
+      `<td style="background:${blue(ua/uaMax)}">${nf(ua)}</td>`;
+    for(const [key] of steps){
+      const v=r[key]||0;
+      const pctRatio=ua? v/ua : 0;
+      b+=`<td style="background:${blue(v/maxes[key])}">${nf(v)}</td>`+
+         `<td class="pct" style="background:${blue(pctRatio)}">${pf(v,ua)}</td>`;
+    }
+    b+='</tr>';
+  });
+  // total row (period-distinct, from ROLLUP)
+  const tua=TOTAL.user_active||0;
+  b+='<tr class="total"><td class="s0 col-idx"></td><td class="s1 col-date">Tổng cộng</td>'+
+     `<td>${nf(tua)}</td>`;
+  for(const [key] of steps){
+    const v=TOTAL[key]||0;
+    b+=`<td>${nf(v)}</td><td class="pct">${pf(v,tua)}</td>`;
+  }
+  b+='</tr>';
+  document.getElementById('tbody').innerHTML=b;
+}
+
+document.getElementById('meta').innerHTML =
+  `Genius · GA4 iip055-genius<br>${DATA.range[0]} → ${DATA.range[1]} · ${DAILY.length} ngày · build ${DATA.generated_at}`;
+document.getElementById('note').innerHTML =
+  'Mỗi ô = số <b>user duy nhất</b> chạm bước đó trong ngày · % = bước / User Active (DAU). '+
+  'Hàng <b>Tổng cộng</b> = user duy nhất trên toàn kỳ (không phải tổng các ngày). '+
+  'Đậm dần theo giá trị <span class="legend"><i></i></span>. '+
+  'Ngày mới nhất là số tạm (GA4 streaming, còn cập nhật trong ngày).';
+
+renderTabs(); renderTable();
+</script>

@@ -1,0 +1,7 @@
+render*.png
+dr*.png
+live.png
+.*.json
+serve.log
+__pycache__/
+*.pyc
