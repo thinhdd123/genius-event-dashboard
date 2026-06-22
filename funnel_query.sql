@@ -4,6 +4,16 @@ WITH base AS (
   FROM `iip055-genius.analytics_523266340.events_intraday_*`
 )
 SELECT FORMAT_DATE('%Y-%m-%d', d) AS d, COUNT(DISTINCT uid) AS user_active,
+  COUNT(DISTINCT IF(ev='splash_view', uid, NULL)) AS onboarding__splash,
+  COUNT(DISTINCT IF(ev='att_allow', uid, NULL)) AS onboarding__att_allow,
+  COUNT(DISTINCT IF(ev='splash_complete', uid, NULL)) AS onboarding__splash_done,
+  COUNT(DISTINCT IF(ev='showcase_1_flow_1_view', uid, NULL)) AS onboarding__s1,
+  COUNT(DISTINCT IF(ev='showcase_2_flow_1_view', uid, NULL)) AS onboarding__s2,
+  COUNT(DISTINCT IF(ev='showcase_3_flow_1_view', uid, NULL)) AS onboarding__s3,
+  COUNT(DISTINCT IF(ev='showcase_4_flow_1_view', uid, NULL)) AS onboarding__s4,
+  COUNT(DISTINCT IF(ev='showcase_5_flow_1_view', uid, NULL)) AS onboarding__s5,
+  COUNT(DISTINCT IF(ev='showcase_6_flow_1_view', uid, NULL)) AS onboarding__s6,
+  COUNT(DISTINCT IF(ev='showcase_6_flow_1_complete', uid, NULL)) AS onboarding__done,
   COUNT(DISTINCT IF(ev='home_view', uid, NULL)) AS enhance__home_view,
   COUNT(DISTINCT IF(ev='enhan_upload_photo_view', uid, NULL)) AS enhance__upload,
   COUNT(DISTINCT IF(ev='enhan_scanning_view', uid, NULL)) AS enhance__scanning,

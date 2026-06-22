@@ -8,6 +8,21 @@ Percentages are computed client-side as step_users / user_active.
 """
 
 FEATURES = {
+    "onboarding": {
+        "label": "Onboarding",
+        "steps": [
+            ("splash",      "Splash view",  "splash_view",                None),
+            ("att_allow",   "ATT allow",    "att_allow",                  None),
+            ("splash_done", "Splash done",  "splash_complete",            None),
+            ("s1",          "Onboard 1",    "showcase_1_flow_1_view",     None),
+            ("s2",          "Onboard 2",    "showcase_2_flow_1_view",     None),
+            ("s3",          "Onboard 3",    "showcase_3_flow_1_view",     None),
+            ("s4",          "Onboard 4",    "showcase_4_flow_1_view",     None),
+            ("s5",          "Onboard 5",    "showcase_5_flow_1_view",     None),
+            ("s6",          "Onboard 6",    "showcase_6_flow_1_view",     None),
+            ("done",        "Onboard done", "showcase_6_flow_1_complete", None),
+        ],
+    },
     "enhance": {
         "label": "Enhance",
         "steps": [
