@@ -2,10 +2,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
-    --ground:#0E1320; --panel:#161D2E; --panel-2:#1C2538; --line:#2A3550;
-    --text:#E7EBF3; --muted:#8A97B4; --faint:#5C6A8C;
-    --mint:#54E6C1; --amber:#F3B445; --violet:#9B8CFF; --blue:#5AA9E6;
-    --pos:#54E6C1; --neg:#FF8089;
+    --ground:#EEF1F6; --panel:#FFFFFF; --panel-2:#F4F6F9; --line:#E2E7EF;
+    --text:#1B2530; --muted:#5C6A7A; --faint:#94A1B2;
+    --mint:#0EA5A4; --amber:#D97706; --violet:#7C3AED; --blue:#2563EB;
+    --pos:#15A34A; --neg:#DC2626;
     --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   }
@@ -13,7 +13,7 @@
   html{-webkit-text-size-adjust:100%}
   body{margin:0;background:var(--ground);color:var(--text);font-family:var(--sans);
     font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;
-    background-image:radial-gradient(1200px 600px at 80% -10%,rgba(84,230,193,.06),transparent 60%);}
+    background-image:radial-gradient(1100px 520px at 85% -10%,rgba(26,115,232,.05),transparent 60%);}
   a{color:inherit}
   .wrap{max-width:1280px;margin:0 auto;padding:24px 20px 64px}
 
@@ -43,7 +43,7 @@
 
   /* kpi grid */
   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-  .kpi{background:linear-gradient(180deg,var(--panel),var(--panel) 40%,#141A29);
+  .kpi{background:var(--panel);box-shadow:0 1px 2px rgba(16,24,40,.04);
     border:1px solid var(--line);border-radius:14px;padding:15px 16px 13px;position:relative;overflow:hidden}
   .kpi .k-label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.04em;
     text-transform:uppercase;display:flex;align-items:center;gap:6px}
@@ -58,7 +58,7 @@
 
   /* panels */
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;
-    padding:18px 20px 20px;margin-bottom:20px}
+    padding:18px 20px 20px;margin-bottom:20px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
   .panel-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
     gap:12px;margin-bottom:6px}
   .panel-head h2{font-size:13px;font-weight:680;letter-spacing:.02em;margin:0;
@@ -79,9 +79,9 @@
 
   .chart-host{position:relative;margin-top:10px}
   svg{display:block;width:100%}
-  .tt{position:absolute;pointer-events:none;background:#0A0E18;border:1px solid var(--line);
+  .tt{position:absolute;pointer-events:none;background:#FFFFFF;border:1px solid var(--line);
     border-radius:9px;padding:9px 11px;font-family:var(--mono);font-size:11.5px;
-    box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;transition:opacity .1s;z-index:5;min-width:120px}
+    box-shadow:0 12px 32px rgba(16,24,40,.16);opacity:0;transition:opacity .1s;z-index:5;min-width:120px}
   .tt .tt-d{color:var(--faint);margin-bottom:5px;font-size:10.5px;letter-spacing:.04em}
   .tt .tt-r{display:flex;align-items:center;justify-content:space-between;gap:14px;line-height:1.7}
   .tt .tt-r b{font-variant-numeric:tabular-nums}
@@ -119,7 +119,7 @@
   th:first-child,td:first-child{text-align:left}
   th[data-sort]:hover{color:var(--muted)}
   th .arr{color:var(--mint)}
-  td{padding:8px 10px;border-bottom:1px solid #1B2236;font-family:var(--mono);font-size:12.5px;
+  td{padding:8px 10px;border-bottom:1px solid #EDF0F5;font-family:var(--mono);font-size:12.5px;
     text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
   tr.ev-row{cursor:pointer}
   tr.ev-row:hover td{background:var(--panel-2)}
@@ -214,8 +214,8 @@ const fmt = n => n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+'M':n>=1e4?(n/1e3).toFixed(0
 const fmtFull = n => n.toLocaleString('en-US');
 const sum = a => a.reduce((s,x)=>s+x,0);
 const COLORS = {dau:'var(--mint)',new_users:'var(--violet)',sessions:'var(--amber)',total_events:'var(--blue)'};
-const RAW = {dau:'#54E6C1',new_users:'#9B8CFF',sessions:'#F3B445',total_events:'#5AA9E6'};
-const EVPAL = ['#FF8FB1','#7EE787','#79C0FF','#FFA657','#D2A8FF','#56D4DD','#F2CC60'];
+const RAW = {dau:'#0EA5A4',new_users:'#7C3AED',sessions:'#D97706',total_events:'#2563EB'};
+const EVPAL = ['#DB2777','#16A34A','#2563EB','#EA580C','#9333EA','#0891B2','#CA8A04'];
 
 // ---------- period window ----------
 let period = 28;                       // 0 = all
@@ -243,10 +243,10 @@ const KPIS = [
   {key:'new',   label:'New users',    color:RAW.new_users,        get:()=>DATA.totals.new_users},
   {key:'ses',   label:'Sessions',     color:RAW.sessions,         get:()=>DATA.totals.sessions},
   {key:'evt',   label:'Total events', color:RAW.total_events,     get:()=>DATA.totals.total_events},
-  {key:'gen',   label:'Generations',  color:'#7EE787', get:()=>evSeries('service_request'), ev:'service_request'},
-  {key:'pw',    label:'Paywall views',color:'#FFA657', get:()=>evSeries('iap_view'),        ev:'iap_view'},
-  {key:'buy',   label:'Purchases',    color:'#FF8FB1', get:()=>evSeries('iap_successful'),  ev:'iap_successful'},
-  {key:'cvr',   label:'Purchase CVR', color:'#D2A8FF', pct:true,
+  {key:'gen',   label:'Generations',  color:'#16A34A', get:()=>evSeries('service_request'), ev:'service_request'},
+  {key:'pw',    label:'Paywall views',color:'#EA580C', get:()=>evSeries('iap_view'),        ev:'iap_view'},
+  {key:'buy',   label:'Purchases',    color:'#DB2777', get:()=>evSeries('iap_successful'),  ev:'iap_successful'},
+  {key:'cvr',   label:'Purchase CVR', color:'#7C3AED', pct:true,
      get:()=>DATA.totals.dau, // placeholder; computed specially
      special:'cvr'},
 ];
@@ -336,16 +336,16 @@ function drawChart(){
   const Y=v=> PADT + (1-v/mx)*(CH-PADT-PADB);
   let g='';
   // window shading
-  g+=`<rect x="${X(ws).toFixed(1)}" y="${PADT}" width="${(X(we)-X(ws)).toFixed(1)}" height="${CH-PADT-PADB}" fill="rgba(84,230,193,.05)"/>`;
+  g+=`<rect x="${X(ws).toFixed(1)}" y="${PADT}" width="${(X(we)-X(ws)).toFixed(1)}" height="${CH-PADT-PADB}" fill="rgba(26,115,232,.07)"/>`;
   // y gridlines
   for(let t=0;t<=4;t++){ const v=mx*t/4, y=Y(v);
-    g+=`<line x1="${PADL}" y1="${y.toFixed(1)}" x2="${CW-PADR}" y2="${y.toFixed(1)}" stroke="#222C42" stroke-width="1"/>`;
-    g+=`<text x="${PADL-8}" y="${(y+3.5).toFixed(1)}" fill="#5C6A8C" font-size="11" font-family="ui-monospace,Menlo,monospace" text-anchor="end">${fmt(Math.round(v))}</text>`;
+    g+=`<line x1="${PADL}" y1="${y.toFixed(1)}" x2="${CW-PADR}" y2="${y.toFixed(1)}" stroke="#E6EAF1" stroke-width="1"/>`;
+    g+=`<text x="${PADL-8}" y="${(y+3.5).toFixed(1)}" fill="#94A1B2" font-size="11" font-family="ui-monospace,Menlo,monospace" text-anchor="end">${fmt(Math.round(v))}</text>`;
   }
   // x labels (~6)
   const step=Math.max(1,Math.round(N/6));
   for(let i=0;i<N;i+=step){ const d=D[i].slice(5);
-    g+=`<text x="${X(i).toFixed(1)}" y="${CH-9}" fill="#5C6A8C" font-size="10.5" font-family="ui-monospace,Menlo,monospace" text-anchor="middle">${d}</text>`;
+    g+=`<text x="${X(i).toFixed(1)}" y="${CH-9}" fill="#94A1B2" font-size="10.5" font-family="ui-monospace,Menlo,monospace" text-anchor="middle">${d}</text>`;
   }
   // lines
   ser.forEach(s=>{
@@ -353,7 +353,7 @@ function drawChart(){
     g+=`<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".95"/>`;
   });
   // hover layer
-  g+=`<line id="cross" x1="0" y1="${PADT}" x2="0" y2="${CH-PADB}" stroke="#465272" stroke-width="1" opacity="0"/>`;
+  g+=`<line id="cross" x1="0" y1="${PADT}" x2="0" y2="${CH-PADB}" stroke="#B6C0D0" stroke-width="1" opacity="0"/>`;
   svg.innerHTML=g;
   // store geometry for hover
   svg._geom={X,Y,ser,mx,ws,we};
@@ -366,7 +366,7 @@ function drawChart(){
     const r=svg.getBoundingClientRect(); const px=(e.clientX-r.left)/r.width*CW;
     let i=Math.round((px-PADL)/((CW-PADL-PADR))*(N-1)); i=Math.max(0,Math.min(N-1,i));
     const cross=svg.querySelector('#cross');
-    const xx=g.X(i); if(cross){cross.setAttribute('x1',xx);cross.setAttribute('x2',xx);cross.setAttribute('opacity','.5');cross.setAttribute('stroke','#465272');}
+    const xx=g.X(i); if(cross){cross.setAttribute('x1',xx);cross.setAttribute('x2',xx);cross.setAttribute('opacity','.5');cross.setAttribute('stroke','#B6C0D0');}
     let rows=g.ser.map(s=>`<div class="tt-r"><em><i style="background:${s.color}"></i>${s.name}</em><b>${fmtFull(s.arr[i])}</b></div>`).join('');
     tt.innerHTML=`<div class="tt-d">${D[i]}</div>${rows}`;
     tt.style.opacity=1;
@@ -409,9 +409,9 @@ function renderGroupFilter(){
   const sel=document.getElementById('grp-filter');
   DATA.groups.forEach(g=>{ const o=document.createElement('option'); o.value=g.id; o.textContent=g.label; sel.appendChild(o);});
 }
-const GCOLOR={splash:'#5AA9E6',onboarding:'#9B8CFF',paywall:'#FF8FB1',home:'#54E6C1',
-  enhance:'#7EE787',i2i:'#FFA657',i2v:'#F3B445',seedance2:'#56D4DD',tryon:'#D2A8FF',
-  wclooks:'#F2CC60',wcvideo:'#79C0FF',service:'#FF8089',auto:'#5C6A8C',other:'#5C6A8C'};
+const GCOLOR={splash:'#2563EB',onboarding:'#7C3AED',paywall:'#DB2777',home:'#0EA5A4',
+  enhance:'#16A34A',i2i:'#EA580C',i2v:'#D97706',seedance2:'#0891B2',tryon:'#9333EA',
+  wclooks:'#CA8A04',wcvideo:'#2563EB',service:'#DC2626',auto:'#94A1B2',other:'#94A1B2'};
 const GLABEL=Object.fromEntries(DATA.groups.map(g=>[g.id,g.label]));
 
 function renderTable(){
