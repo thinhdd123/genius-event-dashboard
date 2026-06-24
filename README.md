@@ -4,6 +4,22 @@ A self-contained web dashboard to read daily GA4 numbers for the **Genius** app
 (BigQuery project `iip055-genius`, dataset `analytics_523266340`). Built from the
 event spec sheet + the live GA4 export. Replaces the Looker Studio daily report.
 
+## Cập nhật số hàng ngày (1 lệnh)
+
+```bash
+cd ~/genius-event-dashboard && ./update-web.sh
+```
+
+Lệnh này: kéo số mới nhất từ BigQuery → rebuild 2 trang → commit → push. Sau ~1 phút
+GitHub Pages tự cập nhật. Cần: `gcloud` ADC (cho BigQuery) + `gh`/`git` auth (cho push).
+Nếu BigQuery báo hết hạn đăng nhập, chạy 1 lần: `gcloud auth application-default login`.
+
+Muốn tự động mỗi sáng 9h (macOS cron):
+
+```
+0 9 * * *  cd ~/genius-event-dashboard && ./update-web.sh >> update.log 2>&1
+```
+
 ## What it shows
 
 - **KPI cards** (selected window vs previous equal window): Avg DAU, New users,
