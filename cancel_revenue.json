@@ -1,0 +1,108 @@
+{
+  "generated_at": "2026-07-07 15:13:54",
+  "generated_epoch": 1783410888,
+  "window_days": 30,
+  "metric": "revenue_churn_rate = churned_mrr / (active_mrr + churned_mrr)",
+  "currency": "USD (assumed)",
+  "subscriptions_scanned": 19437,
+  "genius_product_ids": [
+    "prod_USYVe2UONsFKno"
+  ],
+  "notica_product_ids": [],
+  "buckets": {
+    "genius": {
+      "active_mrr": 49520.14,
+      "active_n": 1342,
+      "churned_mrr": 25233.46,
+      "churned_n": 673,
+      "canceled_curr_mrr": 4869.67,
+      "canceled_curr_n": 120,
+      "products": [
+        {
+          "product_id": "prod_USYVe2UONsFKno",
+          "product_name": "Genius",
+          "active_n": 1342,
+          "active_mrr": 49520.14,
+          "churned_n": 673,
+          "churned_mrr": 25233.46
+        }
+      ],
+      "churn_rate_pct": 33.76
+    },
+    "artimind": {
+      "active_mrr": 401910.65,
+      "active_n": 10396,
+      "churned_mrr": 250136.17,
+      "churned_n": 6368,
+      "canceled_curr_mrr": 24808.14,
+      "canceled_curr_n": 591,
+      "products": [
+        {
+          "product_id": "prod_U2hRL952qIGrzw",
+          "product_name": "Artimind",
+          "active_n": 9624,
+          "active_mrr": 373581.65,
+          "churned_n": 5780,
+          "churned_mrr": 228182.47
+        },
+        {
+          "product_id": "prod_UiCOd6cmz31Kr4",
+          "product_name": "Languoso Weekly 9.99",
+          "active_n": 517,
+          "active_mrr": 22134.99,
+          "churned_n": 396,
+          "churned_mrr": 16954.46
+        },
+        {
+          "product_id": "prod_UiCFrL9651YB4A",
+          "product_name": "Languoso Monthly 29.99",
+          "active_n": 139,
+          "active_mrr": 4168.61,
+          "churned_n": 92,
+          "churned_mrr": 2759.08
+        },
+        {
+          "product_id": "prod_UiCFkXSOOa2MSE",
+          "product_name": "Languoso Monthly 19.99",
+          "active_n": 49,
+          "active_mrr": 979.51,
+          "churned_n": 42,
+          "churned_mrr": 839.58
+        },
+        {
+          "product_id": "prod_UY5z3d8HDhFRNk",
+          "product_name": "Languoso Weekly Yearly Old",
+          "active_n": 8,
+          "active_mrr": 184.59,
+          "churned_n": 19,
+          "churned_mrr": 767.82
+        },
+        {
+          "product_id": "prod_UTLiLfbm46jH0c",
+          "product_name": "Notica",
+          "active_n": 16,
+          "active_mrr": 508.01,
+          "churned_n": 10,
+          "churned_mrr": 391.12
+        },
+        {
+          "product_id": "prod_UiCHrayraHWpvr",
+          "product_name": "Languoso Yearly 99.99",
+          "active_n": 42,
+          "active_mrr": 349.96,
+          "churned_n": 29,
+          "churned_mrr": 241.64
+        },
+        {
+          "product_id": "prod_UTLjlBiQypMbKJ",
+          "product_name": "Boopix",
+          "active_n": 1,
+          "active_mrr": 3.33,
+          "churned_n": 0,
+          "churned_mrr": 0.0
+        }
+      ],
+      "churn_rate_pct": 38.36
+    }
+  }
+}
