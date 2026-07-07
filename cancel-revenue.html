@@ -56,20 +56,38 @@
   .notes{color:var(--muted);font-size:12.5px;line-height:1.75}
   .notes code{font-family:var(--mono);background:var(--panel-2);padding:1px 5px;border-radius:5px;font-size:12px}
   .notes li{margin:4px 0}
+  .panel-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .panel-head h2{margin:0}
+  .seg{display:inline-flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px}
+  .seg button{appearance:none;border:0;background:transparent;color:var(--muted);
+    font-family:var(--mono);font-size:12px;font-weight:600;padding:5px 12px;border-radius:7px;cursor:pointer;transition:.15s}
+  .seg button:hover{color:var(--text)}
+  .seg button[aria-pressed=true]{background:var(--panel);color:var(--mint);box-shadow:inset 0 0 0 1px var(--line)}
+  .tblwrap{overflow-x:auto}
+  .dtable{min-width:560px}
+  .dtable td.day{color:var(--muted);text-align:left}
+  .dtable tfoot td{font-weight:700;border-top:2px solid var(--line);border-bottom:none}
+  .dtable td.heatcell{position:relative}
+  .dtable td.heatcell .heat{position:absolute;left:0;top:4px;bottom:4px;width:var(--w,0);
+    background:color-mix(in srgb,var(--c) 20%,transparent);border-radius:4px;z-index:0}
+  .dtable td.heatcell span{position:relative;z-index:1}
+  .dtable td.zero{color:var(--faint)}
+  .net.up{color:var(--pos)} .net.down{color:var(--neg)}
 </style></head>
 <body><div class="wrap">
+  <!--nav3--><nav style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 20px"><a href="index.html" style="font:600 12.5px ui-monospace,SFMono-Regular,Menlo,monospace;padding:7px 14px;border-radius:9px;text-decoration:none;border:1px solid #E2E7EF;background:#fff;color:#5C6A7A">Daily Event</a><a href="drop-rate.html" style="font:600 12.5px ui-monospace,SFMono-Regular,Menlo,monospace;padding:7px 14px;border-radius:9px;text-decoration:none;border:1px solid #E2E7EF;background:#fff;color:#5C6A7A">Drop Rate</a><a href="cancel-revenue.html" style="font:600 12.5px ui-monospace,SFMono-Regular,Menlo,monospace;padding:7px 14px;border-radius:9px;text-decoration:none;border:1px solid #E2E7EF;background:#fff;color:#5C6A7A;background:#0EA5A4;color:#fff;border-color:#0EA5A4">Cancel Revenue</a></nav>
   <header>
     <div class="brand"><span class="dot"></span>
       <h1>Cancel Revenue <span>· Genius vs Artimind</span></h1></div>
     <div class="meta">
       <div><b>Metric</b> revenue churn (30d)</div>
-      <div><b>Generated</b> 2026-07-07 15:13:54</div>
-      <div><b>Subs scanned</b> 19,437</div>
+      <div><b>Generated</b> 2026-07-07 15:57:18</div>
+      <div><b>Subs scanned</b> 19,448</div>
       <div><a href="index.html">← event console</a></div>
     </div>
   </header>
 
-  <div class="lead">Genius churn <b>33.76%</b> vs Artimind <b>38.36%</b> — <b>Genius</b> giữ doanh thu tốt hơn (4.6 điểm %).</div>
+  <div class="lead">Genius churn <b>33.76%</b> vs Artimind <b>38.45%</b> — <b>Genius</b> giữ doanh thu tốt hơn (4.7 điểm %).</div>
 
   <div class="kpis">
     <div class="kpi">
@@ -80,9 +98,9 @@
     </div>
     <div class="kpi">
       <div class="k-label"><i style="background:var(--violet)"></i>Artimind · revenue churn (30d)</div>
-      <div class="k-val" style="color:var(--violet)">38.4%</div>
-      <div class="k-sub">churned $250,136 MRR · 6368 subs</div>
-      <div class="k-sub">active $401,911 MRR · 10,396 subs</div>
+      <div class="k-val" style="color:var(--violet)">38.5%</div>
+      <div class="k-sub">churned $250,864 MRR · 6385 subs</div>
+      <div class="k-sub">active $401,654 MRR · 10,390 subs</div>
     </div></div>
 
   <div class="panel">
@@ -90,13 +108,13 @@
     
       <div class="barrow">
         <div class="barlab">Genius</div>
-        <div class="bartrack"><div class="barfill" style="width:88.0%;background:var(--mint)"></div></div>
+        <div class="bartrack"><div class="barfill" style="width:87.8%;background:var(--mint)"></div></div>
         <div class="barval">33.76%</div>
       </div>
       <div class="barrow">
         <div class="barlab">Artimind</div>
         <div class="bartrack"><div class="barfill" style="width:100.0%;background:var(--violet)"></div></div>
-        <div class="barval">38.36%</div>
+        <div class="barval">38.45%</div>
       </div>
   </div>
 
@@ -117,15 +135,15 @@
         </tr>
         <tr>
           <td><span class="tag" style="--c:var(--violet)">Artimind</span> Artimind</td>
-          <td class="mono">9,624</td>
-          <td class="mono">$373,582</td>
-          <td class="mono">5,780</td>
-          <td class="mono">$228,182</td>
+          <td class="mono">9,616</td>
+          <td class="mono">$373,239</td>
+          <td class="mono">5,797</td>
+          <td class="mono">$228,910</td>
         </tr>
         <tr>
           <td><span class="tag" style="--c:var(--violet)">Artimind</span> Languoso Weekly 9.99</td>
-          <td class="mono">517</td>
-          <td class="mono">$22,135</td>
+          <td class="mono">519</td>
+          <td class="mono">$22,221</td>
           <td class="mono">396</td>
           <td class="mono">$16,954</td>
         </tr>
@@ -174,6 +192,29 @@
     </table>
   </div>
 
+  
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Huỷ &amp; gia hạn theo ngày <small>cancel (churned MRR) vs renewal (doanh thu) · giờ VN (UTC+7)</small></h2>
+      <div class="seg" id="dayfilter"><button data-f="all" aria-pressed="true">All</button><button data-f="genius">Genius</button><button data-f="artimind">Artimind</button></div>
+    </div>
+    <div class="tblwrap">
+      <table class="dtable">
+        <thead><tr>
+          <th>Ngày</th>
+          <th class="mono">Huỷ (subs)</th>
+          <th class="mono">Churned MRR</th>
+          <th class="mono">Gia hạn (lượt)</th>
+          <th class="mono">Doanh thu gia hạn</th>
+          <th class="mono">Net</th>
+        </tr></thead>
+        <tbody id="dbody"></tbody>
+        <tfoot id="dfoot"></tfoot>
+      </table>
+    </div>
+  </div>
+  <script>window.__DAILY__ = {"days": ["2026-07-07", "2026-07-06", "2026-07-05", "2026-07-04", "2026-07-03", "2026-07-02", "2026-07-01", "2026-06-30", "2026-06-29", "2026-06-28", "2026-06-27", "2026-06-26", "2026-06-25", "2026-06-24", "2026-06-23", "2026-06-22", "2026-06-21", "2026-06-20", "2026-06-19", "2026-06-18", "2026-06-17", "2026-06-16", "2026-06-15", "2026-06-14", "2026-06-13", "2026-06-12", "2026-06-11", "2026-06-10", "2026-06-09", "2026-06-08", "2026-06-07"], "cohorts": {"genius": {"2026-07-07": {"cn": 38, "cm": 1408.38, "rn": 11, "rr": 116.49}, "2026-07-06": {"cn": 47, "cm": 1623.44, "rn": 45, "rr": 479.01}, "2026-07-05": {"cn": 75, "cm": 2801.09, "rn": 52, "rr": 548.96}, "2026-07-04": {"cn": 50, "cm": 1875.67, "rn": 17, "rr": 175.94}, "2026-07-03": {"cn": 57, "cm": 2064.75, "rn": 26, "rr": 273.84}, "2026-07-02": {"cn": 53, "cm": 2026.1, "rn": 38, "rr": 395.91}, "2026-07-01": {"cn": 50, "cm": 1907.65, "rn": 21, "rr": 223.19}, "2026-06-30": {"cn": 21, "cm": 876.28, "rn": 15, "rr": 157.34}, "2026-06-29": {"cn": 25, "cm": 963.24, "rn": 19, "rr": 192.21}, "2026-06-28": {"cn": 26, "cm": 988.56, "rn": 24, "rr": 239.76}, "2026-06-27": {"cn": 19, "cm": 674.7, "rn": 15, "rr": 149.85}, "2026-06-26": {"cn": 13, "cm": 556.59, "rn": 13, "rr": 129.87}, "2026-06-25": {"cn": 26, "cm": 949.91, "rn": 17, "rr": 169.83}, "2026-06-24": {"cn": 20, "cm": 856.29, "rn": 8, "rr": 79.92}, "2026-06-23": {"cn": 21, "cm": 821.8, "rn": 1, "rr": 9.99}, "2026-06-22": {"cn": 26, "cm": 695.53, "rn": 0, "rr": 0.0}, "2026-06-21": {"cn": 31, "cm": 1129.83, "rn": 0, "rr": 0.0}, "2026-06-20": {"cn": 15, "cm": 642.21, "rn": 0, "rr": 0.0}, "2026-06-19": {"cn": 25, "cm": 1030.88, "rn": 0, "rr": 0.0}, "2026-06-18": {"cn": 22, "cm": 862.95, "rn": 0, "rr": 0.0}, "2026-06-17": {"cn": 13, "cm": 477.62, "rn": 0, "rr": 0.0}, "2026-06-16": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-15": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-14": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-13": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-12": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-11": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-10": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-09": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-08": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}, "2026-06-07": {"cn": 0, "cm": 0.0, "rn": 0, "rr": 0.0}}, "artimind": {"2026-07-07": {"cn": 232, "cm": 9512.78, "rn": 382, "rr": 3823.19}, "2026-07-06": {"cn": 205, "cm": 8071.47, "rn": 675, "rr": 6769.54}, "2026-07-05": {"cn": 214, "cm": 8117.14, "rn": 884, "rr": 8857.96}, "2026-07-04": {"cn": 168, "cm": 6792.35, "rn": 549, "rr": 5461.56}, "2026-07-03": {"cn": 152, "cm": 6492.61, "rn": 632, "rr": 6276.74}, "2026-07-02": {"cn": 139, "cm": 5525.6, "rn": 567, "rr": 5651.89}, "2026-07-01": {"cn": 183, "cm": 7391.06, "rn": 573, "rr": 5711.39}, "2026-06-30": {"cn": 172, "cm": 7002.75, "rn": 586, "rr": 5859.44}, "2026-06-29": {"cn": 146, "cm": 5755.28, "rn": 753, "rr": 7523.37}, "2026-06-28": {"cn": 193, "cm": 7655.28, "rn": 897, "rr": 8961.93}, "2026-06-27": {"cn": 220, "cm": 8678.67, "rn": 502, "rr": 5014.98}, "2026-06-26": {"cn": 215, "cm": 8524.06, "rn": 490, "rr": 4896.0}, "2026-06-25": {"cn": 196, "cm": 7220.78, "rn": 440, "rr": 4395.6}, "2026-06-24": {"cn": 251, "cm": 9311.51, "rn": 384, "rr": 3817.08}, "2026-06-23": {"cn": 391, "cm": 14759.26, "rn": 382, "rr": 3816.18}, "2026-06-22": {"cn": 580, "cm": 22775.71, "rn": 318, "rr": 3177.72}, "2026-06-21": {"cn": 438, "cm": 17117.54, "rn": 338, "rr": 3377.52}, "2026-06-20": {"cn": 264, "cm": 10811.19, "rn": 281, "rr": 2797.2}, "2026-06-19": {"cn": 397, "cm": 15714.51, "rn": 296, "rr": 2957.94}, "2026-06-18": {"cn": 234, "cm": 8789.09, "rn": 247, "rr": 2457.54}, "2026-06-17": {"cn": 258, "cm": 10285.59, "rn": 218, "rr": 2118.78}, "2026-06-16": {"cn": 211, "cm": 8119.82, "rn": 204, "rr": 2037.96}, "2026-06-15": {"cn": 184, "cm": 7131.49, "rn": 155, "rr": 1559.27}, "2026-06-14": {"cn": 135, "cm": 5326.8, "rn": 194, "rr": 1969.36}, "2026-06-13": {"cn": 141, "cm": 5660.98, "rn": 175, "rr": 1768.69}, "2026-06-12": {"cn": 111, "cm": 4452.02, "rn": 200, "rr": 1998.9}, "2026-06-11": {"cn": 86, "cm": 3336.02, "rn": 149, "rr": 1488.51}, "2026-06-10": {"cn": 77, "cm": 2858.58, "rn": 146, "rr": 1400.2}, "2026-06-09": {"cn": 78, "cm": 3139.27, "rn": 128, "rr": 1269.43}, "2026-06-08": {"cn": 99, "cm": 3983.9, "rn": 85, "rr": 840.76}, "2026-06-07": {"cn": 15, "cm": 550.92, "rn": 19, "rr": 189.81}}}};</script>
+
   <div class="panel notes">
     <h2>Phương pháp &amp; lưu ý</h2>
     <ul>
@@ -183,4 +224,54 @@
       <li>Giả định toàn bộ giao dịch USD; nếu account có currency khác cần nhân tỷ giá.</li>
     </ul>
   </div>
+<script>
+  (function(){
+    var D = window.__DAILY__; if(!D) return;
+    var f = document.getElementById('dayfilter');
+    var body = document.getElementById('dbody'), foot = document.getElementById('dfoot');
+    var cohortKeys = Object.keys(D.cohorts);
+    function money(x){ return x ? '$'+Math.round(x).toLocaleString('en-US') : '·'; }
+    function series(filter){
+      // returns {day: {cn,cm,rn,rr}} summed over selected cohorts
+      var keys = filter==='all' ? cohortKeys : [filter];
+      var out = {};
+      D.days.forEach(function(d){
+        var a={cn:0,cm:0,rn:0,rr:0};
+        keys.forEach(function(k){ var v=D.cohorts[k][d]; if(v){a.cn+=v.cn;a.cm+=v.cm;a.rn+=v.rn;a.rr+=v.rr;} });
+        out[d]=a;
+      });
+      return out;
+    }
+    function render(filter){
+      var s = series(filter);
+      var maxc=1,maxr=1;
+      D.days.forEach(function(d){ maxc=Math.max(maxc,s[d].cm); maxr=Math.max(maxr,s[d].rr); });
+      var rows='', T={cn:0,cm:0,rn:0,rr:0};
+      D.days.forEach(function(d){
+        var v=s[d]; T.cn+=v.cn;T.cm+=v.cm;T.rn+=v.rn;T.rr+=v.rr;
+        var net=v.rr-v.cm, ncls=net>0?'up':(net<0?'down':'');
+        rows+='<tr>'+
+          '<td class="mono day">'+d+'</td>'+
+          '<td class="mono'+(v.cn?'':' zero')+'">'+(v.cn||'·')+'</td>'+
+          '<td class="mono heatcell"><span class="heat" style="--w:'+(100*v.cm/maxc).toFixed(1)+'%;--c:var(--neg)"></span><span class="'+(v.cm?'':'zero')+'">'+money(v.cm)+'</span></td>'+
+          '<td class="mono'+(v.rn?'':' zero')+'">'+(v.rn||'·')+'</td>'+
+          '<td class="mono heatcell"><span class="heat" style="--w:'+(100*v.rr/maxr).toFixed(1)+'%;--c:var(--pos)"></span><span class="'+(v.rr?'':'zero')+'">'+money(v.rr)+'</span></td>'+
+          '<td class="mono net '+ncls+'">'+(net>0?'+':'')+money(net).replace('·','$0')+'</td>'+
+        '</tr>';
+      });
+      body.innerHTML=rows;
+      var Tnet=T.rr-T.cm;
+      foot.innerHTML='<tr><td class="mono day">Σ '+D.days.length+' ngày</td>'+
+        '<td class="mono">'+T.cn+'</td><td class="mono">'+money(T.cm)+'</td>'+
+        '<td class="mono">'+T.rn+'</td><td class="mono">'+money(T.rr)+'</td>'+
+        '<td class="mono net '+(Tnet>0?'up':'down')+'">'+(Tnet>0?'+':'')+money(Tnet)+'</td></tr>';
+    }
+    f.addEventListener('click', function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      f.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed', x===b);});
+      render(b.dataset.f);
+    });
+    render('all');
+  })();
+</script>
 </div></body></html>
