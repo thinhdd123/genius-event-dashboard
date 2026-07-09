@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-09 14:55:30",
-  "generated_epoch": 1783581400,
+  "generated_at": "2026-07-09 17:43:27",
+  "generated_epoch": 1783592116,
   "window_days": 30,
   "metric": "revenue_churn_rate = churned_mrr / (active_mrr + churned_mrr)",
   "currency": "USD (assumed)",
-  "subscriptions_scanned": 20698,
+  "subscriptions_scanned": 20746,
   "cohort_ids": {
     "genius": [
       "prod_USYVe2UONsFKno"
@@ -52,29 +52,29 @@
   "tz": "Asia/Ho_Chi_Minh (UTC+7)",
   "buckets": {
     "genius": {
-      "active_mrr": 55098.16,
-      "active_n": 1502,
-      "churned_mrr": 29533.05,
-      "churned_n": 783,
-      "canceled_curr_mrr": 7267.27,
-      "canceled_curr_n": 176,
-      "renew_n": 448,
-      "renew_rev": 4658.58,
-      "total_rev": 29998.3,
+      "active_mrr": 55320.56,
+      "active_n": 1509,
+      "churned_mrr": 29618.68,
+      "churned_n": 785,
+      "canceled_curr_mrr": 7524.15,
+      "canceled_curr_n": 182,
+      "renew_n": 458,
+      "renew_rev": 4766.98,
+      "total_rev": 30331.86,
       "products": [
         {
           "product_id": "prod_USYVe2UONsFKno",
           "product_name": "Genius",
-          "active_n": 1502,
-          "active_mrr": 55098.16,
-          "churned_n": 783,
-          "churned_mrr": 29533.05
+          "active_n": 1509,
+          "active_mrr": 55320.56,
+          "churned_n": 785,
+          "churned_mrr": 29618.68
         }
       ],
       "daily": {
         "2026-07-09": {
-          "n": 41,
-          "mrr": 1576.3
+          "n": 43,
+          "mrr": 1661.93
         },
         "2026-07-08": {
           "n": 58,
@@ -167,24 +167,24 @@
       },
       "renew_daily": {
         "2026-07-09": {
-          "n": 48,
-          "rev": 496.32
+          "n": 55,
+          "rev": 574.75
         },
         "2026-07-08": {
-          "n": 51,
-          "rev": 534.93
+          "n": 52,
+          "rev": 544.92
         },
         "2026-07-07": {
           "n": 27,
           "rev": 288.82
         },
         "2026-07-06": {
-          "n": 45,
-          "rev": 479.01
+          "n": 46,
+          "rev": 489.0
         },
         "2026-07-05": {
-          "n": 52,
-          "rev": 548.96
+          "n": 53,
+          "rev": 558.95
         },
         "2026-07-04": {
           "n": 18,
@@ -237,19 +237,19 @@
       },
       "total_daily": {
         "2026-07-09": {
-          "rev": 1817.96
+          "rev": 2121.55
         },
         "2026-07-08": {
-          "rev": 1971.93
+          "rev": 1981.92
         },
         "2026-07-07": {
           "rev": 1847.65
         },
         "2026-07-06": {
-          "rev": 2439.52
+          "rev": 2449.51
         },
         "2026-07-05": {
-          "rev": 3996.4
+          "rev": 4006.39
         },
         "2026-07-04": {
           "rev": 2208.28
@@ -309,26 +309,26 @@
           "rev": 19.98
         }
       },
-      "churn_rate_pct": 34.9
+      "churn_rate_pct": 34.87
     },
     "artimind": {
-      "active_mrr": 383258.74,
-      "active_n": 9891,
-      "churned_mrr": 245425.58,
-      "churned_n": 6200,
-      "canceled_curr_mrr": 31714.46,
-      "canceled_curr_n": 750,
-      "renew_n": 12710,
-      "renew_rev": 127071.04,
-      "total_rev": 238858.52,
+      "active_mrr": 383805.0,
+      "active_n": 9907,
+      "churned_mrr": 246076.13,
+      "churned_n": 6217,
+      "canceled_curr_mrr": 31800.09,
+      "canceled_curr_n": 752,
+      "renew_n": 12751,
+      "renew_rev": 127484.63,
+      "total_rev": 239483.97,
       "products": [
         {
           "product_id": "prod_U2hRL952qIGrzw",
           "product_name": "Artimind",
-          "active_n": 9890,
-          "active_mrr": 383255.41,
-          "churned_n": 6200,
-          "churned_mrr": 245425.58
+          "active_n": 9906,
+          "active_mrr": 383801.67,
+          "churned_n": 6217,
+          "churned_mrr": 246076.13
         },
         {
           "product_id": "prod_UTLjlBiQypMbKJ",
@@ -341,8 +341,8 @@
       ],
       "daily": {
         "2026-07-09": {
-          "n": 143,
-          "mrr": 5676.31
+          "n": 160,
+          "mrr": 6326.86
         },
         "2026-07-08": {
           "n": 329,
@@ -467,12 +467,12 @@
       },
       "renew_daily": {
         "2026-07-09": {
-          "n": 327,
-          "rev": 3312.42
+          "n": 368,
+          "rev": 3726.01
         },
         "2026-07-08": {
-          "n": 559,
-          "rev": 5640.25
+          "n": 560,
+          "rev": 5650.24
         },
         "2026-07-07": {
           "n": 588,
@@ -483,12 +483,12 @@
           "rev": 6599.71
         },
         "2026-07-05": {
-          "n": 864,
-          "rev": 8658.16
+          "n": 865,
+          "rev": 8668.15
         },
         "2026-07-04": {
-          "n": 558,
-          "rev": 5551.47
+          "n": 563,
+          "rev": 5601.42
         },
         "2026-07-03": {
           "n": 642,
@@ -499,16 +499,16 @@
           "rev": 5681.86
         },
         "2026-07-01": {
-          "n": 558,
-          "rev": 5581.52
+          "n": 559,
+          "rev": 5591.51
         },
         "2026-06-30": {
           "n": 580,
           "rev": 5799.5
         },
         "2026-06-29": {
-          "n": 758,
-          "rev": 7573.32
+          "n": 759,
+          "rev": 7583.31
         },
         "2026-06-28": {
           "n": 898,
@@ -539,8 +539,8 @@
           "rev": 3167.73
         },
         "2026-06-21": {
-          "n": 341,
-          "rev": 3407.49
+          "n": 342,
+          "rev": 3417.48
         },
         "2026-06-20": {
           "n": 283,
@@ -551,8 +551,8 @@
           "rev": 2957.94
         },
         "2026-06-18": {
-          "n": 247,
-          "rev": 2467.53
+          "n": 248,
+          "rev": 2477.52
         },
         "2026-06-17": {
           "n": 214,
@@ -587,16 +587,16 @@
           "rev": 1410.19
         },
         "2026-06-09": {
-          "n": 57,
-          "rev": 569.43
+          "n": 46,
+          "rev": 459.54
         }
       },
       "total_daily": {
         "2026-07-09": {
-          "rev": 4933.0
+          "rev": 5658.36
         },
         "2026-07-08": {
-          "rev": 8779.25
+          "rev": 8789.24
         },
         "2026-07-07": {
           "rev": 10781.46
@@ -605,10 +605,10 @@
           "rev": 9899.95
         },
         "2026-07-05": {
-          "rev": 12418.1
+          "rev": 12428.09
         },
         "2026-07-04": {
-          "rev": 8806.66
+          "rev": 8856.61
         },
         "2026-07-03": {
           "rev": 8582.63
@@ -617,13 +617,13 @@
           "rev": 8293.65
         },
         "2026-07-01": {
-          "rev": 7704.08
+          "rev": 7714.07
         },
         "2026-06-30": {
           "rev": 8272.33
         },
         "2026-06-29": {
-          "rev": 9791.07
+          "rev": 9801.06
         },
         "2026-06-28": {
           "rev": 12414.79
@@ -647,7 +647,7 @@
           "rev": 11920.77
         },
         "2026-06-21": {
-          "rev": 14469.18
+          "rev": 14479.17
         },
         "2026-06-20": {
           "rev": 7283.49
@@ -656,7 +656,7 @@
           "rev": 7394.52
         },
         "2026-06-18": {
-          "rev": 6704.31
+          "rev": 6714.3
         },
         "2026-06-17": {
           "rev": 5755.96
@@ -683,35 +683,35 @@
           "rev": 3188.86
         },
         "2026-06-09": {
-          "rev": 1308.87
+          "rev": 1099.07
         }
       },
-      "churn_rate_pct": 39.04
+      "churn_rate_pct": 39.07
     },
     "languoso": {
-      "active_mrr": 33691.5,
-      "active_n": 906,
-      "churned_mrr": 27843.64,
-      "churned_n": 754,
+      "active_mrr": 34021.19,
+      "active_n": 914,
+      "churned_mrr": 28194.49,
+      "churned_n": 763,
       "canceled_curr_mrr": 465.3,
       "canceled_curr_n": 12,
-      "renew_n": 248,
-      "renew_rev": 2477.52,
-      "total_rev": 19958.34,
+      "renew_n": 255,
+      "renew_rev": 2547.45,
+      "total_rev": 20118.2,
       "products": [
         {
           "product_id": "prod_UiCOd6cmz31Kr4",
           "product_name": "Languoso Weekly 9.99",
-          "active_n": 631,
-          "active_mrr": 27015.81,
-          "churned_n": 512,
-          "churned_mrr": 21920.91
+          "active_n": 638,
+          "active_mrr": 27315.51,
+          "churned_n": 520,
+          "churned_mrr": 22263.43
         },
         {
           "product_id": "prod_UiCFrL9651YB4A",
           "product_name": "Languoso Monthly 29.99",
-          "active_n": 171,
-          "active_mrr": 5128.29,
+          "active_n": 172,
+          "active_mrr": 5158.28,
           "churned_n": 130,
           "churned_mrr": 3898.7
         },
@@ -736,14 +736,14 @@
           "product_name": "Languoso Yearly 99.99",
           "active_n": 46,
           "active_mrr": 383.29,
-          "churned_n": 50,
-          "churned_mrr": 416.62
+          "churned_n": 51,
+          "churned_mrr": 424.96
         }
       ],
       "daily": {
         "2026-07-09": {
-          "n": 66,
-          "mrr": 2128.98
+          "n": 75,
+          "mrr": 2479.82
         },
         "2026-07-08": {
           "n": 80,
@@ -840,8 +840,8 @@
       },
       "renew_daily": {
         "2026-07-09": {
-          "n": 17,
-          "rev": 169.83
+          "n": 24,
+          "rev": 239.76
         },
         "2026-07-08": {
           "n": 34,
@@ -918,7 +918,7 @@
       },
       "total_daily": {
         "2026-07-09": {
-          "rev": 939.36
+          "rev": 1099.22
         },
         "2026-07-08": {
           "rev": 1459.01
@@ -1002,7 +1002,7 @@
           "rev": 9.99
         }
       },
-      "churn_rate_pct": 45.25
+      "churn_rate_pct": 45.32
     },
     "notica": {
       "active_mrr": 508.01,
