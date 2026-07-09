@@ -1,3 +1,5 @@
+.env
+.env.*
 render*.png
 dr*.png
 live.png
