@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-13 10:59:49",
-  "generated_epoch": 1783908418,
+  "generated_at": "2026-07-13 11:12:15",
+  "generated_epoch": 1783908863,
   "window_days": 30,
   "metric": "revenue_churn_rate = churned_mrr / (active_mrr + churned_mrr)",
   "currency": "USD (assumed)",
-  "subscriptions_scanned": 21802,
+  "subscriptions_scanned": 21803,
   "cohort_ids": {
     "genius": [
       "prod_USYVe2UONsFKno"
@@ -356,23 +356,23 @@
       "churn_rate_pct": 36.9
     },
     "artimind": {
-      "active_mrr": 394727.14,
-      "active_n": 10198,
-      "churned_mrr": 257601.48,
-      "churned_n": 6484,
+      "active_mrr": 394769.95,
+      "active_n": 10199,
+      "churned_mrr": 257515.85,
+      "churned_n": 6482,
       "canceled_curr_mrr": 40188.86,
       "canceled_curr_n": 949,
-      "renew_n": 15164,
-      "renew_rev": 151904.07,
-      "total_rev": 262549.2,
+      "renew_n": 15166,
+      "renew_rev": 151924.05,
+      "total_rev": 262559.19,
       "products": [
         {
           "product_id": "prod_U2hRL952qIGrzw",
           "product_name": "Artimind",
-          "active_n": 10197,
-          "active_mrr": 394723.81,
-          "churned_n": 6484,
-          "churned_mrr": 257601.48
+          "active_n": 10198,
+          "active_mrr": 394766.62,
+          "churned_n": 6482,
+          "churned_mrr": 257515.85
         },
         {
           "product_id": "prod_UTLjlBiQypMbKJ",
@@ -505,14 +505,14 @@
           "mrr": 5326.8
         },
         "2026-06-13": {
-          "n": 96,
-          "mrr": 3880.1
+          "n": 94,
+          "mrr": 3794.48
         }
       },
       "renew_daily": {
         "2026-07-13": {
-          "n": 335,
-          "rev": 3401.88
+          "n": 338,
+          "rev": 3431.85
         },
         "2026-07-12": {
           "n": 903,
@@ -631,13 +631,13 @@
           "rev": 1928.97
         },
         "2026-06-13": {
-          "n": 77,
-          "rev": 769.23
+          "n": 76,
+          "rev": 759.24
         }
       },
       "total_daily": {
         "2026-07-13": {
-          "rev": 4511.23
+          "rev": 4541.2
         },
         "2026-07-12": {
           "rev": 10585.75
@@ -727,10 +727,10 @@
           "rev": 5236.26
         },
         "2026-06-13": {
-          "rev": 2068.13
+          "rev": 2048.15
         }
       },
-      "churn_rate_pct": 39.49
+      "churn_rate_pct": 39.48
     },
     "languoso": {
       "active_mrr": 35178.69,
