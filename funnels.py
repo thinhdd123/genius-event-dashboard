@@ -1,8 +1,9 @@
 """Per-feature funnel definitions for the Drop Rate by Cutoff tables.
 
 Each step: (col_key, label, event_name, feature_filter)
-  feature_filter = None  -> count users with that event (name already unique)
-                 = "X"   -> count users with that event AND feature_name = "X"
+  feature_filter = None        -> count users with that event (name already unique)
+                 = "X"         -> count users with that event AND feature_name = "X"
+                 = ("X","Y")   -> ... AND feature_name IN ("X","Y")  [name changed over time]
 Base column `user_active` (DAU) and `home_view` (global) are shared/auto-added.
 Percentages are computed client-side as step_users / user_active.
 """
@@ -42,7 +43,7 @@ FEATURES = {
         "label": "Image → Image (I2I)",
         "steps": [
             ("home_view",      "View Home",       "home_view",                 None),
-            ("click_style",    "Click Style",     "home_style_click",           "I2I"),
+            ("click_style",    "Click Style",     "home_style_click",           ("I2I", "IMAGE")),
             ("upload",         "Upload Photo",    "i2i_upload_photo_view",      None),
             ("generate",       "Generate req",    "service_request",            "I2I"),
             ("paywall",        "Paywall view",    "iap_view",                   "I2I"),
@@ -56,7 +57,7 @@ FEATURES = {
         "label": "Image → Video (I2V)",
         "steps": [
             ("home_view",      "View Home",       "home_view",                 None),
-            ("click_style",    "Click Style",     "home_style_click",           "I2V"),
+            ("click_style",    "Click Style",     "home_style_click",           ("I2V", "VIDEO")),
             ("upload",         "Upload Photo",    "i2v_upload_photo_view",      None),
             ("generate",       "Generate req",    "service_request",            "I2V"),
             ("paywall",        "Paywall view",    "iap_view",                   "I2V"),
@@ -112,9 +113,13 @@ def sql_columns():
     for fid, f in FEATURES.items():
         for key, label, ev, ff in f["steps"]:
             colname = f"{fid}__{key}"
-            if ff:
-                expr = (f"COUNT(DISTINCT IF(ev='{ev}' AND fname='{ff}', uid, NULL))")
+            if isinstance(ff, (list, tuple, set)):
+                # feature_name changed over time (e.g. I2I -> IMAGE); match any.
+                vals = ",".join(f"'{v}'" for v in ff)
+                expr = f"COUNT(DISTINCT IF(ev='{ev}' AND fname IN ({vals}), uid, NULL))"
+            elif ff:
+                expr = f"COUNT(DISTINCT IF(ev='{ev}' AND fname='{ff}', uid, NULL))"
             else:
-                expr = (f"COUNT(DISTINCT IF(ev='{ev}', uid, NULL))")
+                expr = f"COUNT(DISTINCT IF(ev='{ev}', uid, NULL))"
             cols[colname] = expr
     return cols
