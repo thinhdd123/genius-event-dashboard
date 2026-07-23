@@ -97,7 +97,11 @@ def build():
   .card{{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.04);margin-bottom:16px}}
   .card-head{{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px 12px}}
   .card-head h2{{font-size:15px;font-weight:700;margin:0}}
-  select{{font-family:var(--mono);font-size:12px;padding:6px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}}
+  label{{font-family:var(--mono);font-size:11.5px;color:var(--muted)}}
+  input[type=date]{{font-family:var(--mono);font-size:12px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}}
+  .seg{{display:inline-flex;background:#F4F6F9;border:1px solid var(--line);border-radius:9px;padding:3px}}
+  .seg button{{border:0;background:transparent;color:var(--muted);font-family:var(--mono);font-size:12px;font-weight:600;padding:5px 11px;border-radius:6px;cursor:pointer}}
+  .seg button[aria-pressed=true]{{background:#fff;color:var(--accent);box-shadow:inset 0 0 0 1px var(--line)}}
   .scroll{{overflow-x:auto}}
   table{{border-collapse:separate;border-spacing:0;width:100%;font-variant-numeric:tabular-nums}}
   th,td{{padding:7px 12px;text-align:right;white-space:nowrap;font-family:var(--mono);font-size:12px}}
@@ -122,7 +126,15 @@ def build():
   <div class="card">
     <div class="card-head">
       <h2>Style dùng nhiều nhất</h2>
-      <label>Kỳ: <select id="scope"></select></label>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span class="seg">
+          <button data-preset="all">Tất cả</button>
+          <button data-preset="7">7N</button>
+          <button data-preset="30">30N</button>
+        </span>
+        <label>Từ <input type="date" id="from"></label>
+        <label>Đến <input type="date" id="to"></label>
+      </div>
     </div>
     <div class="scroll"><table>
       <thead><tr>
@@ -133,38 +145,56 @@ def build():
       </tr></thead>
       <tbody id="tb"></tbody><tfoot id="tf"></tfoot>
     </table></div>
-    <div class="note">Sắp theo Generate (service_request). Metrics đều gắn GA4 param <code>style</code> · Users = distinct theo Generate · chọn "Tổng" hoặc 1 ngày ở góc phải · nguồn events_intraday_* (GA4)</div>
+    <div class="note">Sắp theo Generate · metrics gắn GA4 param <code>style</code> · lọc khoảng ngày ở góc phải (mặc định Tất cả) · <b>Users</b> chính xác khi chọn Tất-cả hoặc 1 ngày; range nhiều ngày hiển thị <code>~</code> (tổng distinct/ngày, đếm trùng user) · nguồn events_intraday_* (GA4)</div>
   </div>
 <script>
   var D = {json.dumps(data, separators=(',',':'))};
-  var sel = document.getElementById('scope');
-  sel.innerHTML = '<option value="__total__">Tổng (all)</option>' + D.days.map(function(d){{return '<option value="'+d+'">'+d+'</option>';}}).join('');
   var COLS = ['c','g','rs','rv','p','u'];
+  var DMIN = D.days.length ? D.days[D.days.length-1] : '';
+  var DMAX = D.days.length ? D.days[0] : '';
+  var fromEl=document.getElementById('from'), toEl=document.getElementById('to');
+  fromEl.min=toEl.min=DMIN; fromEl.max=toEl.max=DMAX; fromEl.value=DMIN; toEl.value=DMAX;
   function nf(x){{return (x||0).toLocaleString('en-US');}}
-  function render(scope){{
-    var rows = D.styles.map(function(st){{
-      var m = scope==='__total__' ? st.tot : (st.day[scope] || {{}});
-      return {{s:st.s, feat:st.feat, m:m}};
-    }}).filter(function(r){{ return (r.m.g||0)+(r.m.c||0)+(r.m.rs||0)+(r.m.rv||0)+(r.m.p||0) > 0; }});
-    rows.sort(function(a,b){{ return (b.m.g||0)-(a.m.g||0); }});
-    var maxg = Math.max(1, rows.length?rows[0].m.g||0:0);
-    var T={{c:0,g:0,rs:0,rv:0,p:0,u:0}};
-    var html = rows.map(function(r,i){{
+  function agg(st, from, to){{
+    // full range -> use exact precomputed total (incl. exact distinct users)
+    if(from<=DMIN && to>=DMAX) return {{m:st.tot, exactU:true}};
+    var m={{c:0,g:0,rs:0,rv:0,p:0,u:0}}, ndays=0;
+    for(var day in st.day){{
+      if(day>=from && day<=to){{ ndays++; var v=st.day[day]; COLS.forEach(function(k){{m[k]+=v[k]||0;}}); }}
+    }}
+    return {{m:m, exactU: ndays<=1}};   // single day -> exact; multi-day -> approx
+  }}
+  function render(){{
+    var from=fromEl.value||DMIN, to=toEl.value||DMAX;
+    if(from>to){{ var t=from; from=to; to=t; fromEl.value=from; toEl.value=to; }}
+    var rows=D.styles.map(function(st){{ var a=agg(st,from,to); return {{s:st.s,feat:st.feat,m:a.m,exactU:a.exactU}}; }})
+      .filter(function(r){{ return (r.m.g||0)+(r.m.c||0)+(r.m.rs||0)+(r.m.rv||0)+(r.m.p||0)>0; }});
+    rows.sort(function(a,b){{return (b.m.g||0)-(a.m.g||0);}});
+    var maxg=Math.max(1, rows.length?rows[0].m.g||0:0);
+    var T={{c:0,g:0,rs:0,rv:0,p:0,u:0}}, anyApprox=false;
+    var html=rows.map(function(r,i){{
       COLS.forEach(function(k){{T[k]+=r.m[k]||0;}});
+      if(!r.exactU) anyApprox=true;
       var w=(100*(r.m.g||0)/maxg).toFixed(1);
+      var uTxt=(r.exactU?'':'~')+nf(r.m.u);
       return '<tr><td class="s0"><span style="color:var(--faint)">'+(i+1)+'.</span> '+r.s+'</td>'+
-        '<td class="feat">'+r.feat+'</td>'+
-        '<td>'+nf(r.m.c)+'</td>'+
+        '<td class="feat">'+r.feat+'</td><td>'+nf(r.m.c)+'</td>'+
         '<td class="g hc"><span class="heat" style="width:'+w+'%"></span><span>'+nf(r.m.g)+'</span></td>'+
-        '<td>'+nf(r.m.rs)+'</td><td>'+nf(r.m.rv)+'</td><td>'+nf(r.m.p)+'</td><td>'+nf(r.m.u)+'</td></tr>';
+        '<td>'+nf(r.m.rs)+'</td><td>'+nf(r.m.rv)+'</td><td>'+nf(r.m.p)+'</td><td>'+uTxt+'</td></tr>';
     }}).join('');
     document.getElementById('tb').innerHTML = html || '<tr><td class="s0">Không có dữ liệu</td><td colspan="7"></td></tr>';
-    document.getElementById('tf').innerHTML = '<tr><td class="s0">Σ '+rows.length+' styles</td><td></td>'+
-      '<td>'+nf(T.c)+'</td><td>'+nf(T.g)+'</td><td>'+nf(T.rs)+'</td><td>'+nf(T.rv)+'</td><td>'+nf(T.p)+'</td><td>'+(scope==='__total__'?'—':nf(T.u))+'</td></tr>';
-    document.getElementById('scopeinfo').textContent = (scope==='__total__'?'Tổng':scope)+' · '+rows.length+' styles';
+    document.getElementById('tf').innerHTML='<tr><td class="s0">Σ '+rows.length+' styles</td><td></td><td>'+nf(T.c)+'</td><td>'+nf(T.g)+'</td><td>'+nf(T.rs)+'</td><td>'+nf(T.rv)+'</td><td>'+nf(T.p)+'</td><td>'+(anyApprox?'~'+nf(T.u):nf(T.u))+'</td></tr>';
+    document.getElementById('scopeinfo').textContent = from+' → '+to+' · '+rows.length+' styles';
   }}
-  sel.addEventListener('change', function(){{ render(sel.value); }});
-  render('__total__');
+  function setPreset(p){{
+    if(p==='all'){{ fromEl.value=DMIN; }}
+    else {{ var d=new Date(DMAX+'T00:00:00'); d.setDate(d.getDate()-(parseInt(p,10)-1));
+            var iso=d.toISOString().slice(0,10); fromEl.value=(iso<DMIN?DMIN:iso); }}
+    toEl.value=DMAX; render();
+  }}
+  document.querySelectorAll('.seg button').forEach(function(b){{ b.onclick=function(){{ setPreset(b.dataset.preset); }}; }});
+  fromEl.addEventListener('change',render); toEl.addEventListener('change',render);
+  render();
 </script>
 </div></body></html>"""
     out = os.path.join(HERE, "styles.html")
