@@ -113,12 +113,23 @@ Add a cron entry (macOS) to rebuild every morning at 09:00:
 | `build.py` / `build_droprate.py` | Pivot JSON exports → inject into the templates. |
 | `funnels.py` | Per-feature funnel step definitions + SQL column generator (shared by build + server). |
 | `refresh.sh` | Pulls all data from BigQuery and rebuilds both static pages. |
+| `web-events.html` | Genius Web only — event coverage, journeys, generation health. |
+| `web.template.html` / `build_web.py` / `refresh_web.sh` | Its template, builder and BigQuery pull. |
 | `per_event.json` / `daily_totals.json` / `funnel_data.json` | Raw BigQuery aggregates. |
 
 ## Notes
 
-- GA4 here is **streaming-only export** (`events_intraday_*`, no finalized
-  `events_*` tables), so the very latest day is partial and updates through the day.
+- The property carries **three streams**: the iOS app (`13454223741`, ~2.09M
+  events), the marketing funnel site (`15339228736`, ~405K) and the Genius web app
+  (`15350238535`, ~2.6K). Every page except `web-events.html` reads the property
+  whole, which is right for the app but leaves the web app invisible at 0.1% of
+  the volume — so read `web-events.html` for anything about genius-web.
+- Both exports are on: finalized `events_YYYYMMDD` daily tables (161 of them,
+  from 2026-07-19) **and** `events_intraday_*`. `refresh.sh` reads intraday only,
+  so its pages cover today rather than history; `refresh_web.sh` reads the daily
+  wildcard, which also matches intraday tables — hence the explicit
+  `stream_id` filter and suffix handling there. (This note used to say the export
+  was streaming-only; that stopped being true.)
 - A few event names in the data differ slightly from the spec: `iap_successful`
   (spec: `iap_successfull`), `service_response` (spec also notes the typo
   `service_reponse`). The dashboard uses the names as they appear in BigQuery.

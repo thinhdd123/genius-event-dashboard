@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Genius Web · Event Coverage</title>
+<style>
+  /* Same tokens as index.html / drop-rate.html — this is one console, not a
+     separate product. */
+  :root{
+    --ground:#EEF1F6; --panel:#FFFFFF; --panel-2:#F4F6F9; --line:#E2E7EF;
+    --text:#1B2530; --muted:#5C6A7A; --faint:#94A1B2;
+    --mint:#0EA5A4; --amber:#D97706; --violet:#7C3AED; --blue:#2563EB;
+    --pos:#15A34A; --neg:#DC2626;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--ground);color:var(--text);font-family:var(--sans);
+    font-size:14px;line-height:1.55;
+    background-image:radial-gradient(1100px 520px at 85% -10%,rgba(124,58,237,.05),transparent 60%);}
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 20px 60px}
+  a{color:var(--blue)}
+
+  header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px}
+  h1{margin:0;font-size:20px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+  .dot{width:11px;height:11px;border-radius:50%;background:var(--violet);
+    box-shadow:0 0 0 4px rgba(124,58,237,.16)}
+  .meta{font-family:var(--mono);font-size:11.5px;color:var(--faint);text-align:right;line-height:1.7}
+  nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+  nav a{font:600 12.5px var(--mono);padding:7px 14px;border-radius:9px;text-decoration:none;
+    border:1px solid var(--line);background:#fff;color:var(--muted)}
+  nav a[aria-current=page]{background:var(--violet);color:#fff;border-color:var(--violet);
+    box-shadow:0 2px 8px rgba(124,58,237,.28)}
+
+  .note{background:#FFF8EC;border:1px solid #F3E0BC;border-left:3px solid var(--amber);
+    border-radius:10px;padding:12px 15px;margin-bottom:22px;font-size:13px;color:#6B4E16}
+  .note b{color:#4A3610}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:12px;margin-bottom:24px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+    box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  .kpi .k-lab{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+  .kpi .k-val{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.02em;margin-top:5px;
+    font-variant-numeric:tabular-nums}
+  .kpi .k-sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+
+  section{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;
+    margin-bottom:18px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  section > h2{margin:0 0 4px;font-size:14.5px;letter-spacing:-.005em}
+  section > p.sub{margin:0 0 16px;font-size:12.5px;color:var(--muted)}
+
+  .tbl-scroll{overflow-x:auto;margin:0 -4px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+  th{font:600 10.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+  td.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:var(--panel-2)}
+  code{font-family:var(--mono);font-size:12.5px}
+
+  .pill{display:inline-block;font:600 11px var(--mono);padding:2px 8px;border-radius:999px}
+  .pill.ok{background:rgba(21,163,74,.11);color:var(--pos)}
+  .pill.no{background:rgba(220,38,38,.10);color:var(--neg)}
+  .pill.auto{background:rgba(148,161,178,.16);color:var(--muted)}
+  .pill.wait{background:rgba(124,58,237,.11);color:var(--violet)}
+
+  /* Funnel: the bar length IS the number, so a drop is visible before it is read. */
+  .fn{display:flex;flex-direction:column;gap:9px}
+  .fn-block + .fn-block{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .fn-block h3{margin:0 0 12px;font:600 10.5px var(--mono);letter-spacing:.09em;
+    text-transform:uppercase;color:var(--faint)}
+  .wait-txt{font-size:11px;color:var(--violet);font-weight:600}
+  .fn-row{display:grid;grid-template-columns:130px 1fr 96px;align-items:center;gap:12px}
+  .fn-lab{font-size:12.5px;color:var(--muted)}
+  .fn-lab code{display:block;font-size:10.5px;color:var(--faint)}
+  .fn-bar{height:26px;background:var(--panel-2);border-radius:7px;overflow:hidden}
+  .fn-fill{height:100%;background:linear-gradient(90deg,var(--violet),#A78BFA);border-radius:7px;
+    min-width:2px;transition:width .5s ease}
+  .fn-fill.zero{background:repeating-linear-gradient(45deg,#F1D5D5,#F1D5D5 5px,#FBE9E9 5px,#FBE9E9 10px)}
+  .fn-fill.pending{background:repeating-linear-gradient(45deg,#E7E9EE,#E7E9EE 5px,#F2F4F7 5px,#F2F4F7 10px)}
+  .fn-n{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:13px;text-align:right}
+  .fn-n small{display:block;font-size:10.5px;color:var(--faint)}
+
+  .spark{display:flex;align-items:flex-end;gap:2px;height:46px;margin-top:10px}
+  .spark i{flex:1;background:var(--violet);opacity:.75;border-radius:2px 2px 0 0;min-height:2px}
+  .spark i:last-child{opacity:1}
+
+  @media (max-width:640px){
+    .fn-row{grid-template-columns:96px 1fr 70px;gap:8px}
+    .wrap{padding:18px 14px 46px}
+  }
+  @media (prefers-reduced-motion:reduce){ .fn-fill{transition:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="dot"></span> Genius Web · Event Coverage</h1>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <nav>
+    <a href="index.html">Daily Event</a>
+    <a href="drop-rate.html">Drop Rate</a>
+    <a href="cancel-revenue.html">Cancel Revenue</a>
+    <a href="payback.html">Payback</a>
+    <a href="styles.html">Styles</a>
+    <a href="web-events.html" aria-current="page">Genius Web</a>
+  </nav>
+
+  <div class="note">
+    <b>Chỉ riêng web app.</b> Property này dùng chung ba stream — iOS app
+    (<code>13454223741</code>), web funnel (<code>15339228736</code>) và genius-web
+    (<code>15350238535</code>). Các trang khác đọc cả property; trang này lọc đúng
+    stream của web app, vốn chỉ chiếm ~0,1% lượng event nên biến mất hoàn toàn ở
+    cấp property.
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <h2>Hành trình người dùng</h2>
+    <p class="sub">
+      Đếm theo người, không theo lượt — khoảng hụt giữa hai bước là người thật rơi ra.
+      Hai hành trình tách riêng vì chúng không nối tiếp nhau: vào được bảng giá mà
+      chưa từng tạo gì là chuyện bình thường.
+    </p>
+    <div id="funnels"></div>
+  </section>
+
+  <section>
+    <h2>Độ phủ đo đạc</h2>
+    <p class="sub">
+      App khai báo <b id="dn"></b> event. Cái nào chưa từng bắn thì hoặc là chưa ai
+      làm hành động đó, hoặc là đo bị hụt — truy vấn không phân biệt được hai
+      trường hợp, nên danh sách khai báo được đối chiếu ở đây.
+    </p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Event</th><th>Trạng thái</th><th class="n">Lượt</th><th class="n">Người</th><th>Lần đầu</th><th>Lần cuối</th></tr></thead>
+        <tbody id="cov"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Sinh nội dung theo model</h2>
+    <p class="sub">p50 / p95 là thời gian chờ thật, đo từ lúc bấm tới lúc có kết quả.</p>
+    <div class="tbl-scroll">
+      <table>
+        <thead><tr><th>Model</th><th>Tool</th><th class="n">Bắt đầu</th><th class="n">Xong</th><th class="n">Hỏng</th><th class="n">Tỉ lệ xong</th><th class="n">p50</th><th class="n">p95</th></tr></thead>
+        <tbody id="mdl"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Theo ngày</h2>
+    <p class="sub">Cột cuối là hôm nay (dữ liệu intraday, chưa chốt).</p>
+    <div class="spark" id="spark"></div>
+    <div class="tbl-scroll" style="margin-top:14px">
+      <table>
+        <thead><tr><th>Ngày</th><th class="n">Event</th><th class="n">Người</th><th class="n">Phiên</th></tr></thead>
+        <tbody id="daily"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<script>
+const D = /*__DATA__*/;
+const n = (v) => (v == null ? "—" : Number(v).toLocaleString("vi-VN"));
+const el = (id) => document.getElementById(id);
+
+el("meta").innerHTML =
+  `cập nhật ${D.generated}<br>${D.totals.from} → ${D.totals.to} · ${D.totals.days} ngày`;
+el("dn").textContent = D.declared_n;
+
+// ── KPIs ──
+const q = D.quality || {};
+const idPct = q.devices ? Math.round((q.identified / q.devices) * 100) : 0;
+const kpis = [
+  ["Event", n(D.totals.events), `${D.totals.days} ngày`],
+  ["Thiết bị", n(q.devices), "user_pseudo_id"],
+  ["Có user_id", `${n(q.identified)}`, `${idPct}% · độ dài ${q.user_id_len ?? "—"}`],
+  ["Event đã bắn", `${D.fired.length}/${D.declared_n}`,
+   `${D.silent.length - D.pending.length} chưa từng · ${D.pending.length} chưa deploy`],
+  ["page_view/phiên", q.pv_per_session ?? "—", Number(q.pv_per_session) > 6 ? "cao bất thường" : "bình thường"],
+];
+el("kpis").innerHTML = kpis.map(([k, v, s]) =>
+  `<div class="kpi"><div class="k-lab">${k}</div><div class="k-val">${v}</div><div class="k-sub">${s}</div></div>`).join("");
+
+// ── Funnels ──
+function drawFunnel(f) {
+  const peak = Math.max(...f.steps.map((s) => s.users), 1);
+  const rows = f.steps.map((step, i) => {
+    // Percentages skip past a step that is not deployed — comparing against a
+    // step that cannot count would be a ratio nobody measured.
+    const prev = f.steps.slice(0, i).reverse().find((p) => !p.pending);
+    const pct = prev && prev.users && !step.pending ? Math.round((step.users / prev.users) * 100) : null;
+    const bar = step.pending
+      ? `<div class="fn-fill pending" style="width:100%"></div>`
+      : `<div class="fn-fill${step.users ? "" : " zero"}" style="width:${Math.max((step.users / peak) * 100, step.users ? 1 : 100)}%"></div>`;
+    return `<div class="fn-row">
+      <div class="fn-lab">${step.label}<code>${step.ev}</code></div>
+      <div class="fn-bar">${bar}</div>
+      <div class="fn-n">${step.pending ? "<span class='wait-txt'>chưa deploy</span>" : n(step.users)}${pct !== null ? `<small>${pct}% bước trước</small>` : ""}</div>
+    </div>`;
+  }).join("");
+  return `<div class="fn-block"><h3>${f.title}</h3><div class="fn">${rows}</div></div>`;
+}
+el("funnels").innerHTML = D.funnels.map(drawFunnel).join("");
+
+// ── Coverage ──
+const rows = D.events.map((e) => ({ ...e, declared: D.fired.includes(e.event_name) }));
+const silent = D.silent.map((name) => ({ event_name: name, declared: true, events: 0, users: 0, first_seen: "—", last_seen: "—" }));
+el("cov").innerHTML = [...rows, ...silent].map((e) => {
+  const pill = D.pending.includes(e.event_name) ? '<span class="pill wait">chưa deploy</span>'
+    : e.events === 0 ? '<span class="pill no">chưa từng bắn</span>'
+    : e.declared ? '<span class="pill ok">đang chạy</span>'
+    : '<span class="pill auto">GA4 tự động</span>';
+  return `<tr><td><code>${e.event_name}</code></td><td>${pill}</td>
+    <td class="n">${n(e.events)}</td><td class="n">${n(e.users)}</td>
+    <td>${e.first_seen}</td><td>${e.last_seen}</td></tr>`;
+}).join("");
+
+// ── Models ──
+el("mdl").innerHTML = D.models.length ? D.models.map((m) => {
+  const rate = m.starts ? Math.round((m.ok / m.starts) * 100) : 0;
+  const col = rate >= 90 ? "var(--pos)" : rate >= 70 ? "var(--amber)" : "var(--neg)";
+  return `<tr><td><code>${m.model_id}</code></td><td>${m.agent_id}</td>
+    <td class="n">${n(m.starts)}</td><td class="n">${n(m.ok)}</td><td class="n">${n(m.failed)}</td>
+    <td class="n" style="color:${col};font-weight:600">${rate}%</td>
+    <td class="n">${m.p50_s ?? "—"}s</td><td class="n">${m.p95_s ?? "—"}s</td></tr>`;
+}).join("") : `<tr><td colspan="8" style="color:var(--muted)">Chưa có lượt sinh nào.</td></tr>`;
+
+// ── Daily ──
+const maxE = Math.max(...D.daily.map((r) => +r.events), 1);
+el("spark").innerHTML = D.daily.map((r) =>
+  `<i style="height:${Math.max((+r.events / maxE) * 100, 3)}%" title="${r.d}: ${n(r.events)}"></i>`).join("");
+el("daily").innerHTML = [...D.daily].reverse().map((r) =>
+  `<tr><td>${r.d}</td><td class="n">${n(r.events)}</td><td class="n">${n(r.users)}</td><td class="n">${n(r.sessions)}</td></tr>`).join("");
+</script>
+</body>
+</html>
