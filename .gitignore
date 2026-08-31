@@ -7,3 +7,7 @@ live.png
 serve.log
 __pycache__/
 *.pyc
+
+# cancel-revenue scan checkpoint (tạm, không publish)
+*.ckpt.json
+*.ckpt.json.tmp
