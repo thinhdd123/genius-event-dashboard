@@ -266,12 +266,9 @@
           "other": 0.0
         }
       },
-      "refund_daily": {},
       "trial_started_n": 0,
       "trial_matured_n": 0,
       "trial_converted_n": 0,
-      "refund_amount": 0.0,
-      "refund_n": 0,
       "products": [
         {
           "product_id": "prod_USYVe2UONsFKno",
@@ -4227,12 +4224,9 @@
           "other": 0.0
         }
       },
-      "refund_daily": {},
       "trial_started_n": 107,
       "trial_matured_n": 0,
       "trial_converted_n": 0,
-      "refund_amount": 0.0,
-      "refund_n": 0,
       "products": [
         {
           "product_id": "prod_U2hRL952qIGrzw",
@@ -8389,12 +8383,9 @@
           "other": 0.0
         }
       },
-      "refund_daily": {},
       "trial_started_n": 0,
       "trial_matured_n": 0,
       "trial_converted_n": 0,
-      "refund_amount": 0.0,
-      "refund_n": 0,
       "products": [
         {
           "product_id": "prod_UTLiLfbm46jH0c",
@@ -8970,7 +8961,7 @@
     },
     "carried_forward": true
   },
-  "refund_basis": "refund.created in window",
+  "refund_basis": "unavailable \u2014 customer->cohort map missing on resume (881 refunds, $10,527 unattributed)",
   "refund_unattributed": 10527.18,
   "refund_unattributed_n": 881,
   "missing_sources": {
